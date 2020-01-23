@@ -1,13 +1,19 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {createStackNavigator, createAppContainer} from 'react-navigation-stack';
+import React, {Component} from 'react';
+
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 import Login from './components/Login/Login.js';
 import MainMenu from './components/MainMenu/MainMenu.js';
 
-const App = createStackNavigator({
-  Login: {screen : Login},
+const MainNavigator = createStackNavigator({
+  Login: {screen : Login,
+    navigationOptions: {
+      headerShown: false
+    },},
   MainMenu: {screen : MainMenu}
 })
 
-export default createAppContainer(App);
+const App = createAppContainer(MainNavigator);
+
+export default App;

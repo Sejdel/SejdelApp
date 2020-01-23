@@ -1,4 +1,4 @@
-import {React, Component} from 'react';
+import React, { Component} from 'react';
 import {View, Text, StyleSheed} from 'react-native';
 
 class MainMenu extends Component {
