@@ -30,32 +30,32 @@ export default class LoginView extends Component {
         <StatusBar hidden />
         <View style={styles.container}>
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_email_black_stor.png')}/>
+            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_email_white_stor.png')}/>
             <TextInput style={styles.inputs}
                 placeholder="Email"
-                placeholderTextColor = "#000000"
+                placeholderTextColor = "#FFFFFF"
                 keyboardType="email-address"
                 underlineColorAndroid='transparent'
                 onChangeText={(email) => this.setState({email})}/>
           </View>
           
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_vpn_key_black_stor.png')}/>
+            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_vpn_key_white_stor.png')}/>
             <TextInput style={styles.inputs}
                 placeholder="Password"
-                placeholderTextColor = "#000000"
+                placeholderTextColor = "#FFFFFF"
                 secureTextEntry={true}
                 underlineColorAndroid='transparent'
                 onChangeText={(password) => this.setState({password})}/>
           </View>
+          <TouchableHighlight style={[styles.buttonContainer, styles.resetPW]} onPress={() => this.onClickListener('restore_password', navigate)}>
+              <Text style={styles.resetPWText}>Supit bort ditt lösenord?</Text>
+          </TouchableHighlight>
 
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('MainMenu', navigate)}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.resetPW]} onPress={() => this.onClickListener('restore_password', navigate)}>
-              <Text style={styles.resetPWText}>Supit bort ditt lösenord?</Text>
-          </TouchableHighlight>
 
           <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('register', navigate)}>
               <Text style={styles.registerText}>Register</Text>
@@ -73,9 +73,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
-      borderRadius:30,
-      borderBottomWidth: 1,
+      borderBottomWidth: 1,      
+      borderBottomColor: '#FFFFFF',
       width:250,
       height:45,
       marginBottom:20,
@@ -104,37 +103,31 @@ const styles = StyleSheet.create({
     borderRadius:30,
   },
   loginButton: {
+    marginTop:70,
     backgroundColor: "rgba(0, 181, 236, 0.7)",
   },
   loginText: {
     color: 'white',
   },
   resetPW: {
-    borderRadius:30,
-    borderWidth: 3,
-    borderColor: '#B22222',
-    backgroundColor: 'rgba(52, 52, 52, 0.5)',
     width:250,
     height:45,
-    marginBottom:20,
+    marginBottom:40,
+    marginTop:-20,
     flexDirection: 'row',
     alignItems:'center'
   },
   resetPWText: {
-    color: '#B22222'
+    color: '#FFFFFF'
   }, 
   register: {
-    borderRadius:30,
-    borderWidth: 3,
-    borderColor: '#008000',
-    backgroundColor: 'rgba(52, 52, 52, 0.5)',
     width:250,
     height:45,
-    marginBottom:20,
+    marginTop:-20,
     flexDirection: 'row',
     alignItems:'center'
   },
   registerText: {
-    color: '#008000'
+    color: '#FFFFFF'
   },
 });
