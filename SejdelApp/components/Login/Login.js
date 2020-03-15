@@ -30,7 +30,7 @@ export default class LoginView extends Component {
         <StatusBar hidden />
         <View style={styles.container}>
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_email_white_stor.png')}/>
+            <Image style={styles.inputIcon} source={require('../../assets/icons/email.png')}/>
             <TextInput style={styles.inputs}
                 placeholder="Email"
                 placeholderTextColor = "#FFFFFF"
@@ -40,7 +40,7 @@ export default class LoginView extends Component {
           </View>
           
           <View style={styles.inputContainer}>
-            <Image style={styles.inputIcon} source={require('../../assets/icons/baseline_vpn_key_white_stor.png')}/>
+            <Image style={styles.inputIcon} source={require('../../assets/icons/lock.png')}/>
             <TextInput style={styles.inputs}
                 placeholder="Password"
                 placeholderTextColor = "#FFFFFF"

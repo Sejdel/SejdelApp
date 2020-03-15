@@ -11,7 +11,10 @@ const MainNavigator = createStackNavigator({
     navigationOptions: {
       headerShown: false
     },},
-  MainMenu: {screen : MainMenu}
+  MainMenu: {screen : MainMenu,
+    navigationOptions: {
+      headerShown: false
+    },}
 })
 
 const App = createAppContainer(MainNavigator);
