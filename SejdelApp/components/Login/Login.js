@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AppInstalledChecker, CheckPackageInstallation } from 'react-native-check-app-install';
 import {
   StyleSheet,
   Text,
@@ -9,7 +10,8 @@ import {
   TouchableHighlight,
   Image,
   Alert,
-  StatusBar
+  StatusBar,
+  Linking
 } from 'react-native';
 
 export default class LoginView extends Component {
@@ -18,11 +20,41 @@ export default class LoginView extends Component {
       email   : '',
       password: '',
     }
+
+    datajson = {
+      "version":1,
+      "payee":{
+      "value":"+46706888887"
+      },
+      "amount":{
+      "value":1
+      },
+      "message":{
+      "value":"Hälsningar Bo \"the King\" Ek",
+      "editable":true
+      }
+     }
     
     onClickListener = (viewId, navigate) => {
       navigate(viewId);
     }
     
+    launchSwish = () => {
+      console.log('asdas')
+      AppInstalledChecker
+      .checkURLScheme('swish') // omit the :// suffix
+      .then((isInstalled) => {
+        console.log('Inside app installed')
+        const serilized = encodeURIComponent(JSON.stringify(this.datajson))
+        const test = "exp://192.168.1.31:19000/payment/"
+        const url = "swish://payment?data="+serilized+"&callbackurl="+test+"&callbackresultparameter=suba";
+        var suba = Linking.openURL(url).then(res => {
+          console.log(decodeURIComponent(res));
+        })
+      })
+      
+    }
+
     render() {
       const {navigate} = this.props.navigation;
     return (
@@ -57,8 +89,13 @@ export default class LoginView extends Component {
           </TouchableHighlight>
 
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('register', navigate)}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('Payment', navigate)}>
               <Text style={styles.registerText}>Register</Text>
+          </TouchableHighlight>
+
+
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.launchSwish()}>
+              <Text style={styles.registerText}>Swish</Text>
           </TouchableHighlight>
         </View>
       </ImageBackground>
