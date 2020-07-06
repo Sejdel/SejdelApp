@@ -2,7 +2,7 @@
   "expo": {
     "name": "SejdelApp",
     "slug": "SejdelApp",
-    "sceheme":"sejdel",
+    "scheme":"sejdel",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [

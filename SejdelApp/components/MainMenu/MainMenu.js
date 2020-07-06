@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import { AppInstalledChecker, CheckPackageInstallation } from 'react-native-check-app-install';
+import url from 'url';
 
 import {
     View, 
@@ -64,9 +65,10 @@ export default class MainMenu extends Component {
   }
 
   _handleOpenURL(event) {
-    console.log("Inside handle url")
-    console.log(decodeURIComponent(event.url));
-  }
+    let urlObject = url.parse(event.url);
+    let params = urlObject.query
+    console.log(decodeURIcomponent(params));
+    }
 
   render(){
       return(

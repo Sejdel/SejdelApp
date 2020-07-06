@@ -25,7 +25,8 @@
     "react-native-vector-icons": "^6.7.0",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^2.0.15"
+    "react-navigation-stack": "^2.0.15",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",
