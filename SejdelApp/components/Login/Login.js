@@ -11,7 +11,8 @@ import {
   Image,
   Alert,
   StatusBar,
-  Linking
+  Linking,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 export default class LoginView extends Component {
@@ -21,38 +22,34 @@ export default class LoginView extends Component {
       password: '',
     }
 
-    datajson = {
-      "version":1,
-      "payee":{
-      "value":"+46706888887"
-      },
-      "amount":{
-      "value":1
-      },
-      "message":{
-      "value":"Hälsningar Bo \"the King\" Ek",
-      "editable":true
-      }
-     }
-    
     onClickListener = (viewId, navigate) => {
       navigate(viewId);
     }
-    
-    launchSwish = () => {
-      console.log('asdas')
-      AppInstalledChecker
-      .checkURLScheme('swish') // omit the :// suffix
-      .then((isInstalled) => {
-        console.log('Inside app installed')
-        const serilized = encodeURIComponent(JSON.stringify(this.datajson))
-        const test = "exp://192.168.1.31:19000/payment/"
-        const url = "swish://payment?data="+serilized+"&callbackurl="+test+"&callbackresultparameter=suba";
-        var suba = Linking.openURL(url).then(res => {
-          console.log(decodeURIComponent(res));
-        })
+
+    login = () => {
+      fetch('https://sejdel.nu/api/auth/signin/', {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+      'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password
       })
-      
+    })
+    .then((response) => response.text())
+      .then((json) => {
+        if(json == "OK"){
+          this.props.navigation.push('MainMenu', this.props.navigation);
+        }else {
+          console.log(json)
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     }
 
     render() {
@@ -84,19 +81,19 @@ export default class LoginView extends Component {
               <Text style={styles.resetPWText}>Supit bort ditt lösenord?</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('MainMenu', navigate)}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableHighlight>
 
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('Payment', navigate)}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('Register', navigate)}>
               <Text style={styles.registerText}>Register</Text>
           </TouchableHighlight>
 
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.launchSwish()}>
-              <Text style={styles.registerText}>Swish</Text>
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('MainMenu', navigate)}>
+              <Text style={styles.registerText}>Main Menu</Text>
           </TouchableHighlight>
+
         </View>
       </ImageBackground>
     );
@@ -116,13 +113,15 @@ const styles = StyleSheet.create({
       height:45,
       marginBottom:20,
       flexDirection: 'row',
-      alignItems:'center'
+      alignItems:'center',
+      color: '#FFFFFF',
   },
   inputs:{
       height:45,
       marginLeft:16,
       borderBottomColor: '#FFFFFF',
       flex:1,
+      color: '#FFFFFF',
   },
   inputIcon:{
     width:30,

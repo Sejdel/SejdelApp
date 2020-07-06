@@ -6,6 +6,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import Login from './components/Login/Login.js';
 import MainMenu from './components/MainMenu/MainMenu.js';
 import Payment from './components/Payment/Payment.js';
+import Register from './components/Register/Register.js';
 
 const MainNavigator = createStackNavigator({
   Login: {screen : Login,
@@ -25,6 +26,12 @@ const MainNavigator = createStackNavigator({
       headerShown: false
     },
     path: 'payment'
+  },
+  Register: {screen : Register,
+    navigationOptions: {
+      headerShown: false
+    },
+    path: 'register'
   }
 })
 
