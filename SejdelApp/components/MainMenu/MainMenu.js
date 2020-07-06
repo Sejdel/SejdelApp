@@ -18,17 +18,22 @@ export default class MainMenu extends Component {
     owed:1
   }
 
-  componentDidMount(){
-    //Set how much the user is owed (in state) from API
-    //Finns ingen API-endpoint?
-    this.setState({owed: 3})
+  componentDidMount() {
+    Linking.getInitialURL().then((ev) => {
+      if (ev) {
+        this._handleOpenURL(ev);
+      }
+    }).catch(err => {
+        console.warn('An error occurred', err);
+    });
+    Linking.addEventListener('url', this._handleOpenURL);
   }
+  
 
   datajson = {
     "version":1,
     "payee":{
-    //"value":"+46706888887"
-    "value":"+46707467004"
+    "value":"+46706888887"
     },
     "amount":{
     "value":this.state.owed
@@ -44,9 +49,10 @@ export default class MainMenu extends Component {
     .checkURLScheme('swish') // omit the :// suffix
     .then((isInstalled) => {
       const serialized = encodeURIComponent(JSON.stringify(this.datajson))
-      const callbackurl="https://sejdel.nu/" //Finns ingen API-endpoint ännu?
-      const url = "swish://payment?data="+serialized+"&callbackurl="+callbackurl+"&callbackresultparameter=suba";
-      var suba = Linking.openURL(url).then(res => {
+      const callbackurl="exp://192.168.0.103:19000" //Finns ingen API-endpoint ännu?
+      const url = "swish://payment?data="+serialized+"&callbackurl="+callbackurl+"&callbackresultparameter=res";
+      
+      var res = Linking.openURL(url).then(res => {
         console.log(decodeURIComponent(res));
       })
     })
@@ -55,6 +61,11 @@ export default class MainMenu extends Component {
 
   onClickListener = (viewId, navigate) => {
     navigate(viewId);
+  }
+
+  _handleOpenURL(event) {
+    console.log("Inside handle url")
+    console.log(decodeURIComponent(event.url));
   }
 
   render(){
