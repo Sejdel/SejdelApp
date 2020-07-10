@@ -20,14 +20,19 @@ export default class MainMenu extends Component {
   }
 
   componentDidMount() {
-    Linking.getInitialURL().then((ev) => {
-      if (ev) {
-        this._handleOpenURL(ev);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log('Initial url is: ' + url);
+        this._handleOpenURL(url);
       }
     }).catch(err => {
         console.warn('An error occurred', err);
     });
     Linking.addEventListener('url', this._handleOpenURL);
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL);
   }
   
 
@@ -50,7 +55,7 @@ export default class MainMenu extends Component {
     .checkURLScheme('swish') // omit the :// suffix
     .then((isInstalled) => {
       const serialized = encodeURIComponent(JSON.stringify(this.datajson))
-      const callbackurl="exp://192.168.0.103:19000" //Finns ingen API-endpoint ännu?
+      const callbackurl="exp://192.168.1.59:19000" //Finns ingen API-endpoint ännu?
       const url = "swish://payment?data="+serialized+"&callbackurl="+callbackurl+"&callbackresultparameter=res";
       
       var res = Linking.openURL(url).then(res => {
@@ -65,9 +70,18 @@ export default class MainMenu extends Component {
   }
 
   _handleOpenURL(event) {
-    let urlObject = url.parse(event.url);
-    let params = urlObject.query
-    console.log(decodeURIcomponent(params));
+      /*
+      Det här är inte dåligt optimerad kod.
+      Det är bara spicy användning av datorns 
+      resurser.
+      */
+      let urlObject = url.parse(event.url);
+      let params = (urlObject.query).slice(4)
+      params = decodeURIComponent(params);
+
+      swishRes = JSON.parse(params)
+
+      console.log(swishRes);
     }
 
   render(){
