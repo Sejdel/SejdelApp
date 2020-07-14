@@ -65,6 +65,7 @@ export default class LoginView extends Component {
                 placeholderTextColor = "#FFFFFF"
                 keyboardType="email-address"
                 underlineColorAndroid='transparent'
+                textContentType="emailAddress"
                 onChangeText={(email) => this.setState({email})}/>
           </View>
           
@@ -75,22 +76,23 @@ export default class LoginView extends Component {
                 placeholderTextColor = "#FFFFFF"
                 secureTextEntry={true}
                 underlineColorAndroid='transparent'
+                textContentType="password"
                 onChangeText={(password) => this.setState({password})}/>
           </View>
           <TouchableHighlight style={[styles.buttonContainer, styles.resetPW]} onPress={() => this.onClickListener('restore_password', navigate)}>
               <Text style={styles.resetPWText}>Supit bort ditt lösenord?</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.login()} underlayColor="rgba(255, 167, 38, 0.4)">
             <Text style={styles.loginText}>Login</Text>
           </TouchableHighlight>
 
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('Register', navigate)}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('Register', navigate)} underlayColor="rgba(255, 255, 255, 0.4)">
               <Text style={styles.registerText}>Register</Text>
           </TouchableHighlight>
 
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('MainMenu', navigate)}>
+          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.onClickListener('MainMenu', navigate)} underlayColor="rgba(255, 255, 255, 0.4)">
               <Text style={styles.registerText}>Main Menu</Text>
           </TouchableHighlight>
 
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop:70,
-    backgroundColor: "rgba(0, 181, 236, 0.7)",
+    backgroundColor: "rgba(255, 167, 38, 0.9)",
   },
   loginText: {
     color: 'white',

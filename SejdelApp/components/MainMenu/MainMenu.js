@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import { AppInstalledChecker, CheckPackageInstallation } from 'react-native-check-app-install';
 import url from 'url';
+import * as Linking from 'expo-linking';
 
 import {
     View, 
@@ -9,9 +10,12 @@ import {
     ImageBackground,
     StatusBar,
     TouchableHighlight,
-    Linking,
     Image
 } from 'react-native';
+
+/*
+Endpoints som behövs: hämta saldo från DB, uppdatera en betalning
+*/
 
 export default class MainMenu extends Component {
 
@@ -20,42 +24,43 @@ export default class MainMenu extends Component {
   }
 
   componentDidMount() {
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        console.log('Initial url is: ' + url);
-        this._handleOpenURL(url);
-      }
-    }).catch(err => {
-        console.warn('An error occurred', err);
-    });
+    this._setCurrentDebt();
     Linking.addEventListener('url', this._handleOpenURL);
   }
 
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleOpenURL);
   }
-  
-
-  datajson = {
-    "version":1,
-    "payee":{
-    "value":"+46706888887"
-    },
-    "amount":{
-    "value":this.state.owed
-    },
-    "message":{
-    "value":"What the fuck did you just fucking say about me, y",
-    "editable":true
-    }
+  _setCurrentDebt() {
+    console.log("GETTING DEBT");
   }
+
+  getData() {
+    
+    let datajson = {
+      "version":1,
+      "payee":{
+      "value":"+46706888887"
+      },
+      "amount":{
+      "value":this.state.owed
+      },
+      "message":{
+      "value":"What the fuck did you just fucking say about me, y",
+      "editable":true
+      }
+    }
+    
+    return datajson;
+  }
+  
 
   launchSwish = () => {
     AppInstalledChecker
     .checkURLScheme('swish') // omit the :// suffix
     .then((isInstalled) => {
-      const serialized = encodeURIComponent(JSON.stringify(this.datajson))
-      const callbackurl="exp://192.168.1.59:19000" //Finns ingen API-endpoint ännu?
+      const serialized = encodeURIComponent(JSON.stringify(this.getData()))
+      const callbackurl="exp://192.168.1.20:19000" //Finns ingen API-endpoint ännu? sejdel:// när publicerad
       const url = "swish://payment?data="+serialized+"&callbackurl="+callbackurl+"&callbackresultparameter=res";
       
       var res = Linking.openURL(url).then(res => {
@@ -65,24 +70,19 @@ export default class MainMenu extends Component {
     
   }
 
+  getDebt() {
+    return this.state.owed;
+  }
+  
   onClickListener = (viewId, navigate) => {
     navigate(viewId);
   }
 
   _handleOpenURL(event) {
-      /*
-      Det här är inte dåligt optimerad kod.
-      Det är bara spicy användning av datorns 
-      resurser.
-      */
-      let urlObject = url.parse(event.url);
-      let params = (urlObject.query).slice(4)
-      params = decodeURIComponent(params);
-
-      swishRes = JSON.parse(params)
-
-      console.log(swishRes);
-    }
+    let res = Linking.parse(event.url)
+    jsonRes = JSON.parse(res.queryParams.res)
+    console.log(jsonRes);
+  }
 
   render(){
       return(
@@ -90,15 +90,21 @@ export default class MainMenu extends Component {
           <StatusBar hidden />
           
           <View style={styles.container}>
-            <View style={styles.inputContainer}>
-              <Image style={styles.inputIcon} source={require('../../assets/icons/account.png')}/>
-              <Text>PROFIL</Text>
+            <View style={styles.profileContainer}>
+              <Image style={styles.profileIcon} source={require('../../assets/icons/account.png')}/>
+              <Text style={styles.debtText}>CURRENT MOTHERFUCKIN' DEBT: {this.getDebt()}</Text>
             </View>
-          </View>
-
-          <TouchableHighlight style={[styles.buttonContainer, styles.register]} onPress={() => this.launchSwish()}>
+            
+            <TouchableHighlight 
+            style={[styles.buttonContainer, styles.register]} 
+            onPress={() => this.launchSwish()}
+            underlayColor="rgba(255, 167, 38, 0.4)"
+            >
               <Text style={styles.registerText}>Swish</Text>
           </TouchableHighlight>
+          </View>
+
+         
 
           </ImageBackground>
       )
@@ -107,24 +113,26 @@ export default class MainMenu extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      inputIcon:{
-        height: 30,
-        width: 30,
-        justifyContent: 'center'
-      },
-      inputContainer: {
-        width:250,
-        height:45,
-        borderWidth: 1,
-        borderColor: '#FFFFFF',
-        marginBottom:20,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    profileIcon:{
+      height: 60,
+      width: 60,
+      justifyContent: 'center'
+    },
+    debtText: {
+      color: 'white',
+      marginTop: 10,
+    },
+    profileContainer: {
+      width:250,
+      height:45,
+      marginBottom:20,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     buttonContainer: {
       height:45,
@@ -134,5 +142,9 @@ const styles = StyleSheet.create({
       marginBottom:20,
       width:250,
       borderRadius:30,
+      marginTop: 20,
     },
+    register: {
+      backgroundColor:'#ffa726'
+    }
 });
